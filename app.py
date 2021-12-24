@@ -17,7 +17,7 @@ except:
     print("\n\nTo prevent ratelimiting, a request will only be posted every 0.5 seconds. To avoid that, run the generator with the -f Parameter")
 num = int(input("How many codes do you want to generate? > "))
 with open("NitroCodes.txt", "w", encoding='utf-8') as file:
-    print("Your nitro codes are being generated, be patient if you entered the high number!")
+    print("Your nitro codes are being generated, be patient if you entered a high number!")
 
     start = time.time()
 
@@ -36,6 +36,11 @@ def check(url):
 
         if r.status_code == 200:
             print(f" Valid | {nitro} ")
+            with open("ValidCodes.txt","r") as f:
+                data = f.read()
+            data+="\n"+nitro
+            with open("ValidCodes.txt","w") as f:
+                f.write(data)
             return
         else:
             #should be invalid
@@ -46,7 +51,7 @@ with open("NitroCodes.txt") as file:
         nitro = line.strip("\n")
 
         url = "https://discordapp.com/api/v6/entitlements/gift-codes/" + nitro + "?with_application=false&with_subscription_plan=true"
-
+        
         t = threading.Thread(target=lambda: check(url))
         t.start()
         time.sleep(rl)
